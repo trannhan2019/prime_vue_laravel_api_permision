@@ -1,4 +1,9 @@
 import axios from "axios";
+// import { useRouter } from "vue-router";
+import router from "../router";
+import { useAuth } from "../stores/auth";
+
+// const router = useRouter();
 
 const axiosClient = axios.create({
   baseURL: "http://localhost:8000",
@@ -28,5 +33,30 @@ const axiosClient = axios.create({
 
 //   return Promise.reject(error);
 // });
+
+axiosClient.interceptors.response.use(null, (err) => {
+  const auth = useAuth();
+
+  switch (err.response?.status) {
+    case 401:
+      auth.clearUser();
+      sessionStorage.clear();
+      router.push({ name: "login" });
+      console.log("401");
+      break;
+    case 403:
+      router.push({ name: "access.denied" });
+      console.log("403");
+      break;
+    case 404:
+      router.push({ name: "not.found" });
+      break;
+    default:
+      router.push({ name: "error" });
+      break;
+  }
+  console.error(err.response.data);
+  return Promise.reject(err);
+});
 
 export default axiosClient;

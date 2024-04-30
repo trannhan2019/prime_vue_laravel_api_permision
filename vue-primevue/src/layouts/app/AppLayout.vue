@@ -5,11 +5,11 @@ import AppFooter from "./AppFooter.vue";
 import AppSidebar from "./AppSidebar.vue";
 import AppConfig from "./AppConfig.vue";
 import { useLayout } from "./composables/layout";
-import { useUsers } from "@/stores/user";
+import { useAuth } from "@/stores/auth";
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
-const userStore = useUsers();
+const authStore = useAuth();
 
 // onBeforeMount(() => {
 //   userStore.getUser();

@@ -1,7 +1,7 @@
 <script setup>
 import { useLayout } from "@/layouts/app/composables/layout";
 import { ref, computed, reactive } from "vue";
-import { useUsers } from "@/stores/user";
+import { useAuth } from "@/stores/auth";
 
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
@@ -9,7 +9,7 @@ import Checkbox from "primevue/checkbox";
 import Button from "primevue/button";
 
 const { layoutConfig } = useLayout();
-const store = useUsers();
+const store = useAuth();
 // const email = ref("");
 // const password = ref("");
 const form = reactive({
