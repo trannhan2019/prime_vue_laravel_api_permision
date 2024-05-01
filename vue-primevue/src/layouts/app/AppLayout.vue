@@ -3,7 +3,7 @@ import { computed, watch, ref, onBeforeMount } from "vue";
 import AppTopbar from "./AppTopbar.vue";
 import AppFooter from "./AppFooter.vue";
 import AppSidebar from "./AppSidebar.vue";
-import AppConfig from "./AppConfig.vue";
+// import AppConfig from "./AppConfig.vue";
 import { useLayout } from "./composables/layout";
 import { useAuth } from "@/stores/auth";
 
@@ -82,10 +82,8 @@ const isOutsideClicked = (event) => {
       </div>
       <app-footer></app-footer>
     </div>
-    <app-config></app-config>
-    <div class="layout-mask"></div>
+    <!-- <div class="layout-mask"></div> -->
   </div>
-  <Toast />
 </template>
 
 <style lang="scss" scoped></style>

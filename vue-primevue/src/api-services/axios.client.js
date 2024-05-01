@@ -15,25 +15,6 @@ const axiosClient = axios.create({
   },
 });
 
-// axiosClient.interceptors.response.use(null, (err) => {
-//   const error = {
-//     status: err.response?.status,
-//     original: err,
-//     validation: {},
-//     message: null,
-//   };
-
-//   if (err.response?.status === 422) {
-//     for (let field in err.response.data.errors) {
-//       error.validation[field] = err.response.data.errors[field][0];
-//     }
-//   } else {
-//     error.message = "Something went wrong. Please try again later.";
-//   }
-
-//   return Promise.reject(error);
-// });
-
 axiosClient.interceptors.response.use(null, (err) => {
   const auth = useAuth();
 
@@ -56,7 +37,7 @@ axiosClient.interceptors.response.use(null, (err) => {
       console.log(err.response.data);
       break;
   }
-  console.error(err.response.data);
+  console.error(err.response);
   return Promise.reject(err);
 });
 

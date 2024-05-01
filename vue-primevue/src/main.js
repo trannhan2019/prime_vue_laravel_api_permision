@@ -5,6 +5,7 @@ import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
 // import { isAxiosError } from "axios";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import ToastService from "primevue/toastservice";
 
 import App from "./App.vue";
 import router from "./router";
@@ -22,6 +23,7 @@ app.use(
 pinia.use(piniaPluginPersistedstate);
 app.use(router);
 app.use(PrimeVue);
+app.use(ToastService);
 
 // const auth = useAuth();
 // if (!auth.isAuthenticated) {

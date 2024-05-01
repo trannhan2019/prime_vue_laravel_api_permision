@@ -1,32 +1,54 @@
 <script setup>
-import { useLayout } from "@/layouts/app/composables/layout";
-import { ref, computed, reactive } from "vue";
+import { computed, reactive } from "vue";
 import { useAuth } from "@/stores/auth";
+import { useLayout } from "@/layouts/app/composables/layout";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
+import { useForm } from "vee-validate";
+import { useToast } from "primevue/usetoast";
 
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
-import Checkbox from "primevue/checkbox";
 import Button from "primevue/button";
+import InputError from "@/components/InputError.vue";
 
 const { layoutConfig } = useLayout();
 const store = useAuth();
-// const email = ref("");
-// const password = ref("");
-const form = reactive({
-  email: "",
-  password: "",
-});
-// const remember = ref(false);
+const toast = useToast();
+// const form = reactive({
+//   email: "",
+//   password: "",
+// });
 
-const logoUrl = computed(() => {
-  return `/layout/images/${
-    layoutConfig.darkTheme.value ? "logo-white" : "logo-dark"
-  }.svg`;
-});
+const schema = toTypedSchema(
+  zod.object({
+    email: zod.string().email(),
+    password: zod.string().min(6),
+  })
+);
 
-const submitLogin = () => {
-  store.login(form);
-};
+const { defineField, handleSubmit, errors, setFieldError, isSubmitting } =
+  useForm({
+    validationSchema: schema,
+  });
+
+const [email] = defineField("email");
+const [password] = defineField("password");
+
+const submitLogin = handleSubmit(async (values) => {
+  try {
+    await store.login(values);
+    toast.add({
+      severity: "success",
+      summary: "Login Success",
+      detail: "Login Success",
+      life: 5000,
+    });
+  } catch (error) {
+    if (error.response.status === 422) console.log("sadfsadfsadfsadf");
+    setFieldError("email", error.response.data.message);
+  }
+});
 </script>
 
 <template>
@@ -34,7 +56,11 @@ const submitLogin = () => {
     class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
   >
     <div class="flex flex-column align-items-center justify-content-center">
-      <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
+      <img
+        src="/images/logo_sba_2.png"
+        alt="Sakai logo"
+        class="mb-7 w-15rem flex-shrink-0"
+      />
       <div
         style="
           border-radius: 56px;
@@ -58,47 +84,46 @@ const submitLogin = () => {
           </div>
           <form @submit.prevent="submitLogin">
             <div>
-              <label
-                for="email1"
-                class="block text-900 text-xl font-medium mb-2"
-                >Email</label
-              >
-              <InputText
-                id="email1"
-                type="text"
-                placeholder="Email address"
-                class="w-full md:w-30rem mb-5"
-                style="padding: 1rem"
-                v-model="form.email"
-              />
+              <div class="field mb-4">
+                <label
+                  for="email1"
+                  class="block text-900 text-xl font-medium mb-2"
+                  >Email</label
+                >
+                <InputText
+                  id="email1"
+                  type="text"
+                  placeholder="Email address"
+                  class="w-full md:w-30rem mb-2"
+                  style="padding: 1rem"
+                  v-model="email"
+                  :invalid="!!errors.email"
+                />
+                <InputError :msg="errors.email" />
+              </div>
 
-              <label
-                for="password1"
-                class="block text-900 font-medium text-xl mb-2"
-                >Password</label
-              >
-              <Password
-                id="password1"
-                v-model="form.password"
-                placeholder="Password"
-                :toggleMask="true"
-                class="w-full mb-3"
-                inputClass="w-full"
-                :inputStyle="{ padding: '1rem' }"
-              ></Password>
-
+              <div class="field mb-5">
+                <label
+                  for="password1"
+                  class="block text-900 font-medium text-xl mb-2"
+                  >Password</label
+                >
+                <Password
+                  id="password1"
+                  v-model="password"
+                  placeholder="Password"
+                  :toggleMask="true"
+                  class="w-full mb-2"
+                  inputClass="w-full"
+                  :inputStyle="{ padding: '1rem' }"
+                  :feedback="false"
+                  :invalid="!!errors.password"
+                />
+                <InputError :msg="errors.password" />
+              </div>
               <div
                 class="flex align-items-center justify-content-between mb-5 gap-5"
               >
-                <!-- <div class="flex align-items-center">
-                <Checkbox
-                  v-model="checked"
-                  id="rememberme1"
-                  binary
-                  class="mr-2"
-                ></Checkbox>
-                <label for="rememberme1">Remember me</label>
-              </div> -->
                 <a
                   class="font-medium no-underline ml-2 text-right cursor-pointer"
                   style="color: var(--primary-color)"
@@ -109,6 +134,7 @@ const submitLogin = () => {
                 label="Sign In"
                 class="w-full p-3 text-xl"
                 type="submit"
+                :loading="isSubmitting"
               ></Button>
             </div>
           </form>
