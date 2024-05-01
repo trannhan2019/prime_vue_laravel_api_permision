@@ -1,22 +1,24 @@
 import { defineStore } from "pinia";
 import { login, getInfo } from "@/api-services/auth";
-import { useStorage } from "@vueuse/core";
+// import { useStorage } from "@vueuse/core";
 
 export const useAuth = defineStore("auth", {
   state: () => ({
-    userData: useStorage("userData", null),
-    authStatus: useStorage("authStatus", []),
+    authData: null,
   }),
 
+  getters: {
+    isAuthenticated: (state) => state.authData ? true : false,
+  },
+
   actions: {
-    async getUser() {
+    async getData() {
       try {
         const res = await getInfo();
-        this.userData = res.data;
+        this.authData = res.data;
       } catch (error) {
         // if (error.response.status !== 409) throw error;
         console.log(error);
-
         // this.router.push('/verify-email')
       }
     },
@@ -31,9 +33,8 @@ export const useAuth = defineStore("auth", {
       }
     },
 
-    clearUser() {
-      this.userData = null;
-      this.authStatus = null;
+    clearData() {
+      this.authData = null;
     },
   },
 

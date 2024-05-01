@@ -11,9 +11,9 @@ const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
 const authStore = useAuth();
 
-// onBeforeMount(() => {
-//   userStore.getUser();
-// });
+onBeforeMount(() => {
+  authStore.getData();
+});
 
 const outsideClickListener = ref(null);
 

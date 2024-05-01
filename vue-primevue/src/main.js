@@ -24,8 +24,8 @@ app.use(router);
 app.use(PrimeVue);
 
 // const auth = useAuth();
-// if (!auth.userData) {
-//   auth.getUser();
+// if (!auth.isAuthenticated) {
+//   auth.getData();
 // }
 
 // app.config.errorHandler = async (err, vm, info) => {

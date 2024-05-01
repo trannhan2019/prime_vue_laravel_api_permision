@@ -11,6 +11,6 @@ Route::middleware(['auth:sanctum','permission:company.read'])->get('/user', func
 
 Route::resource('companies', \App\Http\Controllers\CompanyController::class);
 
-Route::get('/test', function () {
+Route::get('/test', function (Request $request) {
     return $request->user()->getPermissionNames();
 })->middleware('auth:sanctum');

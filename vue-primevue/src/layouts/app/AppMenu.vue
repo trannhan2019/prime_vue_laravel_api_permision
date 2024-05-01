@@ -14,6 +14,11 @@ const model = ref([
         icon: "pi pi-fw pi-home",
         to: "/manage-company",
       },
+      {
+        label: "Manage Role",
+        icon: "pi pi-fw pi-home",
+        to: "/manage-role",
+      },
     ],
   },
 ]);

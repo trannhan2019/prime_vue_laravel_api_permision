@@ -14,7 +14,7 @@ class CompanyController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware("permission:company.create",only:["index","show"]),
+            new Middleware("permission:company.read",only:["index","show"]),
         ];
     }
     /**

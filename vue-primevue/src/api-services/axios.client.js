@@ -39,20 +39,21 @@ axiosClient.interceptors.response.use(null, (err) => {
 
   switch (err.response?.status) {
     case 401:
-      auth.clearUser();
+      auth.clearData();
       sessionStorage.clear();
       router.push({ name: "login" });
-      console.log("401");
       break;
     case 403:
       router.push({ name: "access.denied" });
-      console.log("403");
       break;
     case 404:
       router.push({ name: "not.found" });
       break;
-    default:
+    case 500:
       router.push({ name: "error" });
+      break;
+    default:
+      console.log(err.response.data);
       break;
   }
   console.error(err.response.data);
