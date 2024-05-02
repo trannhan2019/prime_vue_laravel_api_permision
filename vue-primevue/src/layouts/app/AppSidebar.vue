@@ -1,5 +1,5 @@
 <script setup>
-import { usePermission } from "@/composables/permission";
+import { usePermission } from "@/composables/use-permission";
 import AppAdminMenu from "./AppAdminMenu.vue";
 import AppManageMenu from "./AppManageMenu.vue";
 import AppUserMenu from "./AppUserMenu.vue";

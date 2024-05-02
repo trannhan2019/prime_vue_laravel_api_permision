@@ -1,4 +1,9 @@
 import axiosClient from "./axios.client";
 import { csrf } from "./get-csrf";
 
-export const getList = () => axiosClient.get("/api/companies");
+export const getList = (params) =>
+  axiosClient({
+    url: "/api/companies",
+    method: "get",
+    params,
+  });

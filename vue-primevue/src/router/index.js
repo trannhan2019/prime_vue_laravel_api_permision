@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AppLayout from "../layouts/app/AppLayout.vue";
-import HomeView from "../views/HomeView.vue";
 import NotFound from "../views/NotFound.vue";
 import Error from "../views/Error.vue";
 import AccessDenied from "../views/auth/AccessDenied.vue";
@@ -8,9 +7,9 @@ import { useAuth } from "@/stores/auth";
 
 const APP_NAME = import.meta.env.VITE_APP_NAME || "SBA";
 
-const checkGuest = (to, from, next)=>{
+const checkGuest = (to, from, next) => {
   useAuth().isAuthenticated ? next({ name: "dashboard" }) : next();
-}
+};
 
 const checkAuth = (to, from, next) => {
   useAuth().isAuthenticated ? next() : next({ name: "login" });
@@ -25,15 +24,6 @@ const checkPermission = (to, from, next, permission) => {
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: "/",
-    //   name: "home",
-    //   component: HomeView,
-    //   meta: {
-    //     title: "Home",
-    //     guard: "guest",
-    //   },
-    // },
     {
       path: "/login",
       name: "login",
@@ -69,7 +59,7 @@ const router = createRouter({
         {
           path: "/manage-company",
           name: "manage.company",
-          component: () => import("../views/ManageCompany.vue"),
+          component: () => import("../views/manage/company/ManageCompany.vue"),
           meta: {
             title: "Manage Company",
           },
