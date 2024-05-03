@@ -1,19 +1,22 @@
 <script setup>
-import { ref, onMounted } from "vue";
 import { getList } from "@/api-services/company";
 import { useQuery } from "@tanstack/vue-query";
 import Nav from "./Nav.vue";
 import List from "./List.vue";
 import { usePagination } from "@/composables/use-pagination";
+import { useSearch } from "@/composables/use-search";
 
 const { paginateState, onPageChange } = usePagination();
 
+const { searchState, onSearch } = useSearch();
+
 const { data: companies, isLoading } = useQuery({
-  queryKey: ["company-list", paginateState],
+  queryKey: ["company-list", paginateState, searchState],
   queryFn: () =>
     getList({
       page: paginateState.page.value,
-      item_per_page: paginateState.rows.value,
+      rows: paginateState.rows.value,
+      search: searchState.search.value,
     }),
 });
 </script>
@@ -28,6 +31,7 @@ const { data: companies, isLoading } = useQuery({
           :companies="companies?.data || []"
           :isLoading="isLoading"
           @onPageChange="onPageChange"
+          @onSearch="onSearch"
         />
       </div>
     </div>

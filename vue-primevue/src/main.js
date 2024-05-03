@@ -18,9 +18,20 @@ app.use(
     store.router = markRaw(router);
   })
 );
+
 pinia.use(piniaPluginPersistedstate);
 app.use(router);
-app.use(VueQueryPlugin);
+
+const vueQueryPluginOptions = {
+  queryClientConfig: {
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  },
+};
+app.use(VueQueryPlugin, vueQueryPluginOptions);
 app.use(PrimeVue);
 app.use(ToastService);
 

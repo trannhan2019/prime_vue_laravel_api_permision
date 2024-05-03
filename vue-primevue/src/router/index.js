@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import NProgress from "nprogress";
 import AppLayout from "../layouts/app/AppLayout.vue";
 import NotFound from "../views/NotFound.vue";
 import Error from "../views/Error.vue";
@@ -119,41 +120,27 @@ const router = createRouter({
   ],
 });
 
-// Navigation guard
-// router.beforeEach((to, from, next) => {
-//   const authStore = useAuth();
+//meta title
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title
+    ? `${to.meta.title} | ${APP_NAME}`
+    : `${APP_NAME}`;
+  next();
+});
 
-//   const user = authStore.authData;
-//   const auth = authStore.isAuthenticated;
+//NPROGRESS
+router.beforeResolve((to, from, next) => {
+  // If this isn't an initial page load.
+  if (to.name) {
+    // Start the route progress bar.
+    NProgress.start();
+  }
+  next();
+});
 
-//   if (auth) {
-//     if (to.matched.some((route) => route.meta.isRequiredAuth === false)) {
-//       next({ name: "dashboard" });
-//     }
-//   } else if (!auth) {
-//     if (to.matched.some((route) => route.meta.isRequiredAuth === true)) {
-//       next({ name: "login" });
-//     }
-//   } else {
-//     next();
-//   }
-//   // if (to.meta.permission) {
-//   //   if (
-//   //     to.meta.permission.some((permission) =>
-//   //       user.permissions.includes(permission)
-//   //     )
-//   //   ) {
-//   //     next();
-//   //   } else {
-//   //     next({ name: "access.denied" });
-//   //   }
-//   // } else {
-//   //   if (to.matched.some((route) => route.meta.guard === "guest") && auth)
-//   //     next({ name: "dashboard" });
-//   //   else if (to.matched.some((route) => route.meta.guard === "auth") && !auth)
-//   //     next({ name: "login" });
-//   //   else next();
-//   // }
-// });
+router.afterEach((to, from) => {
+  // Complete the animation of the route progress bar.
+  NProgress.done();
+});
 
 export default router;

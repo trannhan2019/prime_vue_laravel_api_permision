@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from "vue";
+
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import IconField from "primevue/iconfield";
@@ -13,7 +15,9 @@ defineProps({
   isLoading: Boolean,
 });
 
-defineEmits(["onPageChange"]);
+defineEmits(["onPageChange", "onSearch"]);
+
+const search = ref("");
 
 const getBadgeSeverity = (companyStatus) => {
   switch (companyStatus) {
@@ -31,19 +35,25 @@ const getBadgeSeverity = (companyStatus) => {
   <DataTable
     dataKey="id"
     :value="companies?.data || []"
-    :loading="isLoading"
     scrollable
     scroll-height="500px"
+    :striped-rows="true"
   >
     <template #header>
       <div
         class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
       >
         <h5 class="m-0">Manage Comanies</h5>
-        <IconField iconPosition="left" class="block mt-2 md:mt-0">
-          <InputIcon class="pi pi-search" />
-          <InputText class="w-full sm:w-auto" placeholder="Search..." />
-        </IconField>
+        <form @submit.prevent="$emit('onSearch', search)">
+          <IconField iconPosition="left" class="block mt-2 md:mt-0">
+            <InputIcon class="pi pi-search" />
+            <InputText
+              class="w-full sm:w-auto"
+              placeholder="Search..."
+              v-model="search"
+            />
+          </IconField>
+        </form>
       </div>
     </template>
     <template #empty> No companies found. </template>
@@ -53,6 +63,13 @@ const getBadgeSeverity = (companyStatus) => {
     <Column
       field="name"
       header="Name"
+      headerStyle="width:14%; min-width:10rem;"
+    >
+    </Column>
+
+    <Column
+      field="alias"
+      header="Alias"
       headerStyle="width:14%; min-width:10rem;"
     >
     </Column>
@@ -78,8 +95,8 @@ const getBadgeSeverity = (companyStatus) => {
   </DataTable>
 
   <Paginator
-    v-if="companies?.meta"
-    :first="companies?.meta.from - 1"
+    v-if="companies?.meta?.total > 0"
+    :first="companies?.meta.from - 1 || 0"
     :rows="companies?.meta.per_page || 10"
     :totalRecords="companies?.meta.total || 0"
     :rowsPerPageOptions="[10, 20, 30]"
@@ -87,3 +104,9 @@ const getBadgeSeverity = (companyStatus) => {
     class="mt-3"
   />
 </template>
+
+<style scoped>
+/* .p-component-overlay {
+  height: 500px;
+} */
+</style>

@@ -22,11 +22,17 @@ class CompanyController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $query = Company::query();
-        $itemPerPage = request('item_per_page', 10);
+        $rows = request('rows', 10);
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
-        $companies = $query->orderBy($sortField, $sortDirection)->paginate($itemPerPage);
+        $search = request("search");
+
+        $query = Company::query();
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+            $query->orWhere('alias', 'like', '%' . $search . '%');
+        }
+        $companies = $query->orderBy($sortField, $sortDirection)->paginate($rows);
 
         // return response()->json(CompanyResource::collection($companies));
         return CompanyResource::collection($companies);
