@@ -60,7 +60,7 @@ const router = createRouter({
         {
           path: "/manage-company",
           name: "manage.company",
-          component: () => import("../views/manage/company/ManageCompany.vue"),
+          component: () => import("../views/manage/company/Index.vue"),
           meta: {
             title: "Manage Company",
           },

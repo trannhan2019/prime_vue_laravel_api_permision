@@ -1,24 +1,23 @@
 <script setup>
-import { computed, reactive } from "vue";
+import { useMutation } from "@tanstack/vue-query";
+import { useRouter } from "vue-router";
 import { useAuth } from "@/stores/auth";
-import { useLayout } from "@/layouts/app/composables/layout";
+// import { useLayout } from "@/layouts/app/composables/layout";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useForm } from "vee-validate";
 import { useToast } from "primevue/usetoast";
+import { login } from "@/api-services/auth";
 
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import InputError from "@/components/InputError.vue";
 
-const { layoutConfig } = useLayout();
-const store = useAuth();
+// const { layoutConfig } = useLayout();
+const authStore = useAuth();
 const toast = useToast();
-// const form = reactive({
-//   email: "",
-//   password: "",
-// });
+const router = useRouter();
 
 const schema = toTypedSchema(
   zod.object({
@@ -35,19 +34,34 @@ const { defineField, handleSubmit, errors, setFieldError, isSubmitting } =
 const [email] = defineField("email");
 const [password] = defineField("password");
 
+const { mutate } = useMutation({
+  mutationFn: (values) => login(values),
+});
+
 const submitLogin = handleSubmit(async (values) => {
-  try {
-    await store.login(values);
-    toast.add({
-      severity: "success",
-      summary: "Login Success",
-      detail: "Login Success",
-      life: 5000,
-    });
-  } catch (error) {
-    if (error.response.status === 422) console.log("sadfsadfsadfsadf");
-    setFieldError("email", error.response.data.message);
-  }
+  mutate(values, {
+    onSuccess: (data) => {
+      toast.add({
+        severity: "success",
+        summary: "Login Success",
+        detail: "Login Success",
+        life: 5000,
+      });
+      authStore.setData(data.data);
+      router.push({ name: "dashboard" });
+    },
+    onError: (error) => {
+      if (error.response.status === 422) {
+        setFieldError("email", error.response.data.message);
+      }
+      toast.add({
+        severity: "error",
+        summary: "Login Failed",
+        detail: "Login Failed",
+        life: 5000,
+      });
+    },
+  });
 });
 </script>
 

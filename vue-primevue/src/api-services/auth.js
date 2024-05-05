@@ -1,11 +1,11 @@
 import axiosClient from "./axios.client";
 import { csrf } from "./get-csrf";
 
-export const login = async (form) => {
+export const login = async (values) => {
   await csrf();
   return axiosClient.post("/login", {
-    email: form.email,
-    password: form.password,
+    email: values.email,
+    password: values.password,
   });
 };
 

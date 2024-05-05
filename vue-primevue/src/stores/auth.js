@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+// import {  QueryClient } from "@tanstack/vue-query";
 import { login, getInfo, logout } from "@/api-services/auth";
 
 export const useAuth = defineStore("auth", {
@@ -12,18 +13,35 @@ export const useAuth = defineStore("auth", {
 
   actions: {
     async getData() {
+      // const { data } = await useQuery({
+      //   queryKey: ["auth"],
+      //   queryFn: getInfo,
+      // });
+      // this.authData = data?.data;
       const res = await getInfo(); // getInfo();
       this.authData = res.data;
     },
 
+    //su dung tanstack/vue-query out side compnonent
+    // async getTestUser() {
+    //   const queryClient = new QueryClient();
+    //   try {
+    //     const data = await queryClient.fetchQuery({
+    //       queryKey: ["auth"],
+    //       queryFn: getInfo,
+    //       staleTime: 1000 * 60 * 60,
+    //     });
+    //     console.log(data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+
+    setData(data) {
+      this.authData = data;
+    },
     clearData() {
       this.authData = null;
-    },
-
-    async login(form) {
-      await login(form);
-      await this.getData();
-      this.router.push({ name: "dashboard" });
     },
 
     async logout() {
