@@ -1,18 +1,30 @@
 <script setup>
-import { computed, watch, ref, onBeforeMount } from "vue";
+import { computed, watch, ref } from "vue";
+import { useQuery } from "@tanstack/vue-query";
 import AppTopbar from "./AppTopbar.vue";
 import AppFooter from "./AppFooter.vue";
 import AppSidebar from "./AppSidebar.vue";
 // import AppConfig from "./AppConfig.vue";
 import { useLayout } from "./composables/layout";
 import { useAuth } from "@/stores/auth";
+import { getInfo } from "@/api-services/auth";
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
 const authStore = useAuth();
 
-onBeforeMount(() => {
-  authStore.getData();
+// onBeforeMount(() => {
+//   authStore.getData();
+// });
+useQuery({
+  queryKey: ["auth"],
+  queryFn: () => {
+    return getInfo();
+  },
+  enabled: authStore.isAuthenticated,
+  onSuccess: (data) => {
+    authStore.setData(data.data);
+  },
 });
 
 const outsideClickListener = ref(null);

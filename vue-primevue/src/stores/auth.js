@@ -12,16 +12,6 @@ export const useAuth = defineStore("auth", {
   },
 
   actions: {
-    async getData() {
-      // const { data } = await useQuery({
-      //   queryKey: ["auth"],
-      //   queryFn: getInfo,
-      // });
-      // this.authData = data?.data;
-      const res = await getInfo(); // getInfo();
-      this.authData = res.data;
-    },
-
     //su dung tanstack/vue-query out side compnonent
     // async getTestUser() {
     //   const queryClient = new QueryClient();

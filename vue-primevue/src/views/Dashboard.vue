@@ -2,10 +2,6 @@
 import { useAuth } from "@/stores/auth";
 
 const store = useAuth();
-
-const getUser = () => {
-  store.getData();
-};
 </script>
 <template>
   <div>
