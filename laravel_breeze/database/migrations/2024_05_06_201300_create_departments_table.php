@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('alias');
             $table->boolean('is_active')->default(true);
             $table->integer('location')->default(0);
-            $table->foreingId('company_id')->constrained();
+            $table->foreignId('company_id')->constrained();
             $table->timestamps();
         });
     }

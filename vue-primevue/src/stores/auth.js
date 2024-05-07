@@ -34,11 +34,11 @@ export const useAuth = defineStore("auth", {
       this.authData = null;
     },
 
-    async logout() {
-      await logout();
-      this.clearData();
-      this.router.push({ name: "login" });
-    },
+    // async logout() {
+    //   await logout();
+    //   this.clearData();
+    //   this.router.push({ name: "login" });
+    // },
   },
 
   persist: {

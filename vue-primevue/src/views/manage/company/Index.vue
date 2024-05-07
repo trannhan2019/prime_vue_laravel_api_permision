@@ -3,7 +3,6 @@ import { useQuery, keepPreviousData } from "@tanstack/vue-query";
 import { getList } from "@/api-services/company";
 import { usePagination } from "@/composables/use-pagination";
 import { useSearch } from "@/composables/use-search";
-import Panel from "primevue/panel";
 import Fieldset from "primevue/fieldset";
 import Nav from "./Nav.vue";
 import List from "./List.vue";

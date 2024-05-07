@@ -1,10 +1,13 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useMutation } from "@tanstack/vue-query";
 import { useLayout } from "./composables/layout";
 import { useAuth } from "@/stores/auth";
 import { useRouter } from "vue-router";
+import { logout } from "@/api-services/auth";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
+import { useToast } from "primevue/usetoast";
 
 const { onMenuToggle } = useLayout();
 
@@ -28,7 +31,14 @@ const itemMenuProfile = ref([
   },
 ]);
 const router = useRouter();
-const { logout } = useAuth();
+const toast = useToast();
+const { clearData } = useAuth();
+
+const { mutate } = useMutation({
+  mutationFn: () => {
+    logout();
+  },
+});
 
 onMounted(() => {
   bindOutsideClickListener();
@@ -59,7 +69,26 @@ const onProfileButtonClick = (event) => {
   menuProfile.value.toggle(event);
 };
 const onLogoutClick = () => {
-  logout();
+  mutate(null, {
+    onSuccess: async () => {
+      clearData();
+      toast.add({
+        severity: "success",
+        summary: "Logout Success",
+        detail: "Logout Success",
+        life: 5000,
+      });
+      await router.push({ name: "login" });
+    },
+    onError: (error) => {
+      toast.add({
+        severity: "error",
+        summary: "Logout Failed",
+        detail: error.response.data.message,
+        life: 5000,
+      });
+    },
+  });
 };
 
 const bindOutsideClickListener = () => {
