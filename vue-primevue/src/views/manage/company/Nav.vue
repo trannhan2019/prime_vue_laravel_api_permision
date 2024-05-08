@@ -14,7 +14,13 @@ defineEmits(["onSearch", "onOpenForm"]);
   <Toolbar class="mb-3 mt-2">
     <template #start>
       <div class="my-2">
-        <Button label="New" icon="pi pi-plus" class="mr-2" severity="success" @click="$emit('onOpenForm','newForm')" />
+        <Button
+          label="New"
+          icon="pi pi-plus"
+          class="mr-2"
+          severity="success"
+          @click="$emit('onOpenForm')"
+        />
         <Button label="Delete" icon="pi pi-trash" severity="danger" />
       </div>
     </template>

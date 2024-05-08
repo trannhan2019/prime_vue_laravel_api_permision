@@ -4,14 +4,13 @@ import Column from "primevue/column";
 import Tag from "primevue/tag";
 import Paginator from "primevue/paginator";
 import Button from "primevue/button";
-import Panel from "primevue/panel";
 import Card from "primevue/card";
 
 defineProps({
   companies: Object,
 });
 
-defineEmits(["onPageChange", "onSearch"]);
+defineEmits(["onPageChange", "onSearch", "onOpenForm", "openEditFormWithID"]);
 
 // const search = ref("");
 
@@ -76,6 +75,7 @@ const getBadgeSeverity = (companyStatus) => {
               class="mr-2"
               severity="success"
               rounded
+              @click="$emit('openEditFormWithID', slotProps.data.id)"
             />
             <Button
               icon="pi pi-trash"

@@ -7,3 +7,7 @@ export const getList = (params) =>
     method: "get",
     params,
   });
+
+export const store = (data) => axiosClient.post("/api/companies", data);
+
+export const show = (id) => axiosClient.get(`/api/companies/${id}`);

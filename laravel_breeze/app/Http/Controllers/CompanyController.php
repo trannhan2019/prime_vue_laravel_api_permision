@@ -15,6 +15,7 @@ class CompanyController extends Controller implements HasMiddleware
     {
         return [
             new Middleware("permission:company.read",only:["index","show"]),
+            new Middleware("permission:company.create",only:["store"]),
         ];
     }
     /**
@@ -51,7 +52,10 @@ class CompanyController extends Controller implements HasMiddleware
      */
     public function store(StoreCompanyRequest $request)
     {
-        //
+        $data = $request->validated();
+        $company = Company::create($data);
+
+        return new CompanyResource($company);
     }
 
     /**
@@ -59,7 +63,7 @@ class CompanyController extends Controller implements HasMiddleware
      */
     public function show(Company $company)
     {
-        //
+        return new CompanyResource($company);
     }
 
     /**

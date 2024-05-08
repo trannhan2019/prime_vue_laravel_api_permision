@@ -7,37 +7,71 @@ import { useForm } from "vee-validate";
 import InputText from "primevue/inputtext";
 import InputError from "@/components/InputError.vue";
 import Button from "primevue/button";
+import InputSwitch from "primevue/inputswitch";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { store } from "@/api-services/company";
+import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
   visible: Object,
 });
-defineEmits(["onCloseForm"]);
+const emit = defineEmits(["onCloseForm"]);
 
 const isShow = computed(() => {
   return props.visible.value === true ? true : false;
 });
 
+const toast = useToast();
+
+const queryClient = useQueryClient();
+
 const schema = toTypedSchema(
   zod.object({
     name: zod.string().min(3),
     alias: zod.string().min(3),
-    // is_active: zod.boolean().default(true),
+    is_active: zod.boolean().default(true),
   })
 );
-const { defineField, handleSubmit, errors, setFieldError } = useForm({
+const { defineField, handleSubmit, errors, resetForm, setErrors } = useForm({
   validationSchema: schema,
 });
 const [name] = defineField("name");
 const [alias] = defineField("alias");
 const [is_active] = defineField("is_active");
 
+const { mutate } = useMutation({
+  mutationFn: (values) => store(values),
+});
+
 const onSubmit = handleSubmit((values) => {
-  console.log(values);
+  mutate(values, {
+    onSuccess: () => {
+      emit("onCloseForm");
+      queryClient.invalidateQueries(["company-list"]);
+      resetForm();
+      toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Added successfully",
+        life: 3000,
+      });
+    },
+    onError: (error) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Failed to add",
+        life: 3000,
+      });
+      if (error.response.status === 422) {
+        setErrors(error.response.data.errors);
+      }
+    },
+  });
 });
 </script>
 
 <template>
-  <!-- <form @submit.prevent="onSubmit"> -->
   <Dialog
     :visible="isShow"
     @update:visible="$emit('onCloseForm')"
@@ -46,46 +80,38 @@ const onSubmit = handleSubmit((values) => {
     :modal="true"
     class="p-fluid"
   >
-    <div class="field">
-      <label>Name</label>
-      <InputText
-        v-model.trim="name"
-        required="true"
-        autofocus
-        :invalid="!!errors.name"
-      />
-      <InputError :msg="errors.name" />
-    </div>
+    <form @submit.prevent="onSubmit">
+      <div class="field">
+        <label>Name</label>
+        <InputText v-model="name" autofocus :invalid="!!errors.name" />
+        <InputError :msg="errors.name" />
+      </div>
 
-    <div class="field">
-      <label>Alias</label>
-      <InputText
-        v-model.trim="alias"
-        required="true"
-        :invalid="!!errors.alias"
-      />
-      <InputError :msg="errors.alias" />
-    </div>
-    <template #footer
-      ><Button
-        @click="$emit('onCloseForm')"
-        label="Cancel"
-        icon="pi pi-times"
-        severity="secondary"
-      />
-      <Button
-        type="submit"
-        severity="success"
-        label="Save"
-        icon="pi pi-check"
-      />
-      <Button
-        severity="success"
-        label="Test"
-        icon="pi pi-check"
-        @click="onSubmit"
-      />
-    </template>
+      <div class="field">
+        <label>Alias</label>
+        <InputText v-model="alias" :invalid="!!errors.alias" />
+        <InputError :msg="errors.alias" />
+      </div>
+
+      <div class="flex align-items-center gap-3">
+        <label>Status</label>
+        <InputSwitch v-model="is_active" />
+      </div>
+
+      <div class="flex justify-content-end gap-2 mt-4">
+        <Button
+          @click="$emit('onCloseForm')"
+          label="Cancel"
+          icon="pi pi-times"
+          severity="secondary"
+        />
+        <Button
+          type="submit"
+          severity="success"
+          label="Save"
+          icon="pi pi-check"
+        />
+      </div>
+    </form>
   </Dialog>
-  <!-- </form> -->
 </template>
