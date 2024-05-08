@@ -14,7 +14,7 @@ const { paginateState, onPageChange } = usePagination();
 
 const { searchState, onSearch } = useSearch();
 
-const { showForm,onOpenForm,onCloseForm } = useShowHideForm();
+const { showForm, onOpenForm, onCloseForm } = useShowHideForm();
 // const openNewForm = computed(() => showForm.newForm.value === true ? true : false);
 
 const { data: companies } = useQuery({
@@ -27,22 +27,17 @@ const { data: companies } = useQuery({
     }),
   placeholderData: keepPreviousData,
 });
-
-
 </script>
 
 <template>
   <div class="grid">
     <div class="col-12">
       <Fieldset legend="MANAGE COMPANY">
-        <Nav @onSearch="onSearch" @onOpenForm="onOpenForm"/>
+        <Nav @onSearch="onSearch" @onOpenForm="onOpenForm" />
         <List :companies="companies?.data || []" @onPageChange="onPageChange" />
       </Fieldset>
     </div>
   </div>
   <!-- Add new form -->
-  <Add :visible="showForm.newForm" @onCloseForm="onCloseForm('newForm')"/>
-  <!-- <Dialog v-model:visible="visible" :style="{ width: '450px' }" header="Add new company" :modal="true" class="p-fluid"/>
-  <button @click="visible = true">test</button> -->
-
+  <Add :visible="showForm.newForm" @onCloseForm="onCloseForm('newForm')" />
 </template>

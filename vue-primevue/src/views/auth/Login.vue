@@ -34,13 +34,13 @@ const { defineField, handleSubmit, errors, setFieldError, isSubmitting } =
 const [email] = defineField("email");
 const [password] = defineField("password");
 
-const { mutate } = useMutation({
+const { mutate, isPending } = useMutation({
   mutationFn: (values) => login(values),
 });
 
-const submitLogin = handleSubmit(async (values) => {
+const submitLogin = handleSubmit((values) => {
   mutate(values, {
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.add({
         severity: "success",
         summary: "Login Success",
@@ -48,7 +48,7 @@ const submitLogin = handleSubmit(async (values) => {
         life: 5000,
       });
       authStore.setData(data.data);
-      router.push({ name: "dashboard" });
+      await router.push({ name: "dashboard" });
     },
     onError: (error) => {
       if (error.response.status === 422) {
@@ -148,7 +148,7 @@ const submitLogin = handleSubmit(async (values) => {
                 label="Sign In"
                 class="w-full p-3 text-xl"
                 type="submit"
-                :loading="isSubmitting"
+                :loading="isPending"
               ></Button>
             </div>
           </form>
