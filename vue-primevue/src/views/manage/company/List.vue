@@ -10,7 +10,13 @@ defineProps({
   companies: Object,
 });
 
-defineEmits(["onPageChange", "onSearch", "onOpenForm", "openEditFormWithID"]);
+defineEmits([
+  "onPageChange",
+  "onSearch",
+  "onOpenFormWithID",
+  "openEditFormWithID",
+  "openDeleteFormWithID",
+]);
 
 // const search = ref("");
 
@@ -75,13 +81,16 @@ const getBadgeSeverity = (companyStatus) => {
               class="mr-2"
               severity="success"
               rounded
-              @click="$emit('openEditFormWithID', slotProps.data.id)"
+              @click="$emit('onOpenFormWithID', 'editForm', slotProps.data.id)"
             />
             <Button
               icon="pi pi-trash"
               class="mt-2"
               severity="warning"
               rounded
+              @click="
+                $emit('onOpenFormWithID', 'deleteForm', slotProps.data.id)
+              "
             />
           </template>
         </Column>

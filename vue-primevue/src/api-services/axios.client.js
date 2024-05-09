@@ -39,9 +39,9 @@ axiosClient.interceptors.response.use(
       case 403:
         router.push({ name: "access.denied" });
         break;
-      case 404:
-        router.push({ name: "not.found" });
-        break;
+      // case 404:
+      //   router.push({ name: "not.found" });
+      //   break;
       case 500:
         router.push({ name: "error" });
         break;

@@ -16,6 +16,8 @@ class CompanyController extends Controller implements HasMiddleware
         return [
             new Middleware("permission:company.read",only:["index","show"]),
             new Middleware("permission:company.create",only:["store"]),
+            new Middleware("permission:company.update",only:["update"]),
+            new Middleware("permission:company.delete",only:["destroy"]),
         ];
     }
     /**
@@ -39,13 +41,6 @@ class CompanyController extends Controller implements HasMiddleware
         return CompanyResource::collection($companies);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -66,20 +61,17 @@ class CompanyController extends Controller implements HasMiddleware
         return new CompanyResource($company);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Company $company)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        //
+        $data = $request->validated();
+        $company->update($data);
+
+        return new CompanyResource($company);
+
     }
 
     /**
@@ -87,6 +79,8 @@ class CompanyController extends Controller implements HasMiddleware
      */
     public function destroy(Company $company)
     {
-        //
+        $company->delete();
+
+        return response()->noContent();
     }
 }

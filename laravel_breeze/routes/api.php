@@ -9,7 +9,7 @@ Route::middleware(['auth:sanctum','permission:company.read'])->get('/user', func
     // return $request->user()->getAllPermissions()->pluck('name');
 });
 
-Route::resource('companies', \App\Http\Controllers\CompanyController::class);
+Route::apiResource('companies', \App\Http\Controllers\CompanyController::class);
 
 Route::get('/test', function (Request $request) {
     return $request->user()->getPermissionNames();
