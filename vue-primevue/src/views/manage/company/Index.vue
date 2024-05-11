@@ -15,7 +15,7 @@ const { paginateState, onPageChange } = usePagination();
 
 const { searchState, onSearch } = useSearch();
 
-const { showForm, onOpenForm, onCloseForm, onOpenFormWithID } =
+const { showForm, onOpenForm, onCloseForm, onOpenFormWithData } =
   useShowHideForm();
 
 const { data: companies } = useQuery({
@@ -39,7 +39,7 @@ const { data: companies } = useQuery({
         <List
           :companies="companies?.data || []"
           @onPageChange="onPageChange"
-          @onOpenFormWithID="onOpenFormWithID"
+          @onOpenFormWithData="onOpenFormWithData"
         />
       </Fieldset>
     </div>
@@ -50,12 +50,12 @@ const { data: companies } = useQuery({
   <Edit
     :visible="showForm.editForm"
     @onCloseForm="onCloseForm('editForm')"
-    :companyId="showForm.id"
+    :company="showForm.data"
   />
   <!-- Delete form -->
   <Delete
     :visible="showForm.deleteForm"
     @onCloseForm="onCloseForm('deleteForm')"
-    :companyId="showForm.id"
+    :company="showForm.data"
   />
 </template>

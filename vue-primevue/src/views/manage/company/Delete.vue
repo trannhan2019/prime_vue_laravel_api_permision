@@ -8,7 +8,7 @@ import Button from "primevue/button";
 
 const props = defineProps({
   visible: Object,
-  companyId: Object,
+  company: Object,
 });
 const emit = defineEmits(["onCloseForm"]);
 
@@ -21,7 +21,7 @@ const toast = useToast();
 const queryClient = useQueryClient();
 
 const { mutate } = useMutation({
-  mutationFn: () => destroy(props.companyId.value),
+  mutationFn: () => destroy(props.company.value.id),
 });
 
 const onSubmit = () => {
@@ -59,7 +59,6 @@ const onSubmit = () => {
     <div class="flex align-items-center justify-content-center">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
       <span>Are you sure you want to delete the selected company?</span>
-      <p>{{ props.companyId }}</p>
     </div>
     <template #footer>
       <Button

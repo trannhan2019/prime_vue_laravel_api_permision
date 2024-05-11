@@ -19,7 +19,7 @@ import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
   visible: Object,
-  companyId: Object,
+  company: Object,
 });
 
 const emit = defineEmits(["onCloseForm"]);
@@ -27,21 +27,24 @@ const emit = defineEmits(["onCloseForm"]);
 const isShow = computed(() => {
   return props.visible.value === true ? true : false;
 });
+// const hasChanged = computed(() => {
+//   return props.company.value !== null ? true : false;
+// });
 
 const toast = useToast();
 
 const queryClient = useQueryClient();
 
-const { data: company } = useQuery({
-  queryKey: ["company", props.companyId],
-  queryFn: () => show(props.companyId.value),
-  placeholderData: keepPreviousData,
-  enabled: !!props.companyId,
-  retry: 0,
-});
+// const { data: company } = useQuery({
+//   queryKey: ["company", props.companyId],
+//   queryFn: () => show(props.companyId.value),
+//   placeholderData: keepPreviousData,
+//   enabled: hasChanged,
+//   retry: 0,
+// });
 
 const { mutate } = useMutation({
-  mutationFn: (values) => update(props.companyId.value, values),
+  mutationFn: (values) => update(props.company.value.id, values),
 });
 
 const schema = toTypedSchema(
@@ -88,11 +91,9 @@ const onSubmit = handleSubmit((values) => {
   });
 });
 
-watch(company, () => {
+watch(props.company, () => {
   // setFieldValue("name", company.name);
-  setValues(company?.value.data);
-  // console.log(props.companyId.value);
-  // console.log(company);
+  setValues(props.company.value);
 });
 
 // onMounted(() => {

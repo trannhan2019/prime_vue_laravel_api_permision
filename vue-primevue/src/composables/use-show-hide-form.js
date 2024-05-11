@@ -2,7 +2,7 @@ import { reactive, toRefs } from "vue";
 
 export function useShowHideForm() {
   const showForm = reactive({
-    id: 1,
+    data: null,
     newForm: false,
     editForm: false,
     deleteForm: false,
@@ -17,15 +17,15 @@ export function useShowHideForm() {
     showForm[form] = false;
   };
 
-  const onOpenFormWithID = (form, id) => {
+  const onOpenFormWithData = (form, value) => {
     showForm[form] = true;
-    showForm.id = id;
+    showForm.data = value;
   };
 
   return {
     showForm: toRefs(showForm),
     onOpenForm,
     onCloseForm,
-    onOpenFormWithID,
+    onOpenFormWithData,
   };
 }
