@@ -8,6 +8,7 @@ import InputText from "primevue/inputtext";
 import Toolbar from "primevue/toolbar";
 
 const search = ref("");
+defineProps(["isSelected"]);
 defineEmits(["onSearch", "onOpenForm"]);
 </script>
 <template>
@@ -19,9 +20,15 @@ defineEmits(["onSearch", "onOpenForm"]);
           icon="pi pi-plus"
           class="mr-2"
           severity="success"
-          @click="$emit('onOpenForm')"
+          @click="$emit('onOpenForm', 'newForm')"
         />
-        <Button label="Delete" icon="pi pi-trash" severity="danger" />
+        <Button
+          label="Delete"
+          icon="pi pi-trash"
+          severity="danger"
+          :disabled="!isSelected"
+          @click="$emit('onOpenForm', 'deleteSelectedForm')"
+        />
       </div>
     </template>
     <template #end>

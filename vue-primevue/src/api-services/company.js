@@ -16,3 +16,13 @@ export const update = (id, data) =>
   axiosClient.put(`/api/companies/${id}`, data);
 
 export const destroy = (id) => axiosClient.delete(`/api/companies/${id}`);
+
+// export const destroyList = (ids) =>
+//   axiosClient({
+//     url: "/api/companies-destroy",
+//     method: "delete",
+//     data: ids,
+//   });
+
+export const destroyList = (ids) =>
+  axiosClient.delete("/api/companies-destroy", { data: { ids } });

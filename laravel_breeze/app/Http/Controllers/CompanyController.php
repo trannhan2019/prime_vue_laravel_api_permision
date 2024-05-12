@@ -83,4 +83,12 @@ class CompanyController extends Controller implements HasMiddleware
 
         return response()->noContent();
     }
+
+    public function destroyList()
+    {
+        $ids = request('ids');
+        Company::destroy($ids);
+
+        return response()->noContent();
+    }
 }

@@ -3,20 +3,22 @@ import { useQuery, keepPreviousData } from "@tanstack/vue-query";
 import { getList } from "@/api-services/company";
 import { usePagination } from "@/composables/use-pagination";
 import { useSearch } from "@/composables/use-search";
+import { useSelectedList } from "@/composables/use-selected-list";
 import { useShowHideForm } from "@/composables/use-show-hide-form";
 import Fieldset from "primevue/fieldset";
 import Nav from "./Nav.vue";
 import List from "./List.vue";
-import Add from "./Add.vue";
-import Edit from "./Edit.vue";
-import Delete from "./Delete.vue";
+import AddModal from "./AddModal.vue";
+import EditModal from "./EditModal.vue";
+import DeleteModal from "./DeleteModal.vue";
+import DeleteListModal from "./DeleteListModal.vue";
 
 const { paginateState, onPageChange } = usePagination();
-
 const { searchState, onSearch } = useSearch();
-
 const { showForm, onOpenForm, onCloseForm, onOpenFormWithData } =
   useShowHideForm();
+const { selectState, isSelected, selectedListIds, onResetSelectedList } =
+  useSelectedList();
 
 const { data: companies } = useQuery({
   queryKey: ["company-list", paginateState, searchState],
@@ -34,10 +36,15 @@ const { data: companies } = useQuery({
   <div class="grid">
     <div class="col-12">
       <Fieldset legend="MANAGE COMPANY">
-        <Nav @onSearch="onSearch" @onOpenForm="onOpenForm('newForm')" />
+        <Nav
+          :isSelected="isSelected"
+          @onSearch="onSearch"
+          @onOpenForm="onOpenForm"
+        />
 
         <List
           :companies="companies?.data || []"
+          v-model:selectedList="selectState.selectedList.value"
           @onPageChange="onPageChange"
           @onOpenFormWithData="onOpenFormWithData"
         />
@@ -45,17 +52,24 @@ const { data: companies } = useQuery({
     </div>
   </div>
   <!-- Add new form -->
-  <Add :visible="showForm.newForm" @onCloseForm="onCloseForm('newForm')" />
+  <AddModal :visible="showForm.newForm" @onCloseForm="onCloseForm('newForm')" />
   <!-- Edit form -->
-  <Edit
+  <EditModal
     :visible="showForm.editForm"
     @onCloseForm="onCloseForm('editForm')"
     :company="showForm.data"
   />
   <!-- Delete form -->
-  <Delete
+  <DeleteModal
     :visible="showForm.deleteForm"
     @onCloseForm="onCloseForm('deleteForm')"
     :company="showForm.data"
+  />
+  <!-- Delete List Modal -->
+  <DeleteListModal
+    :visible="showForm.deleteSelectedForm"
+    :selectedListIds="selectedListIds"
+    @onCloseForm="onCloseForm('deleteSelectedForm')"
+    @onResetSelectedList="onResetSelectedList"
   />
 </template>

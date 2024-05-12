@@ -13,6 +13,7 @@ defineProps({
 defineEmits(["onPageChange", "onSearch", "onOpenFormWithData"]);
 
 // const search = ref("");
+const selectedCompanyList = defineModel("selectedList");
 
 const getBadgeSeverity = (companyStatus) => {
   switch (companyStatus) {
@@ -32,6 +33,7 @@ const getBadgeSeverity = (companyStatus) => {
       <DataTable
         dataKey="id"
         :value="companies?.data || []"
+        v-model:selection="selectedCompanyList"
         :striped-rows="true"
       >
         <template #empty> No companies found. </template>

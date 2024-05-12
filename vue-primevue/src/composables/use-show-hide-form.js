@@ -6,7 +6,7 @@ export function useShowHideForm() {
     newForm: false,
     editForm: false,
     deleteForm: false,
-    deleteSeletedForm: false,
+    deleteSelectedForm: false,
   });
 
   const onOpenForm = (form) => {
