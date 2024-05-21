@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Company;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
@@ -17,7 +18,7 @@ class CompanyController extends Controller implements HasMiddleware
             new Middleware("permission:company.read",only:["index","show"]),
             new Middleware("permission:company.create",only:["store"]),
             new Middleware("permission:company.update",only:["update"]),
-            new Middleware("permission:company.delete",only:["destroy"]),
+            new Middleware("permission:company.delete",only:["destroy","destroyList"]),
         ];
     }
     /**

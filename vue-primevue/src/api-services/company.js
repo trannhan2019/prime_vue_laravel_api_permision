@@ -8,14 +8,22 @@ export const getList = (params) =>
     params,
   });
 
-export const store = (data) => axiosClient.post("/api/companies", data);
+export const store = async (data) => {
+  await csrf();
+  return axiosClient.post("/api/companies", data);
+};
 
 export const show = (id) => axiosClient.get(`/api/companies/${id}`);
 
-export const update = (id, data) =>
-  axiosClient.put(`/api/companies/${id}`, data);
+export const update = async (id, data) => {
+  await csrf();
+  return axiosClient.put(`/api/companies/${id}`, data);
+};
 
-export const destroy = (id) => axiosClient.delete(`/api/companies/${id}`);
+export const destroy = async (id) => {
+  await csrf();
+  return axiosClient.delete(`/api/companies/${id}`);
+};
 
 // export const destroyList = (ids) =>
 //   axiosClient({
@@ -24,5 +32,7 @@ export const destroy = (id) => axiosClient.delete(`/api/companies/${id}`);
 //     data: ids,
 //   });
 
-export const destroyList = (ids) =>
-  axiosClient.delete("/api/companies-destroy", { data: { ids } });
+export const destroyList = async (ids) => {
+  await csrf();
+  return axiosClient.delete("/api/companies-destroy", { data: { ids } });
+};

@@ -69,6 +69,17 @@ const router = createRouter({
           },
         },
         {
+          path: "/manage-department",
+          name: "manage.department",
+          component: () => import("../views/manage/department/Index.vue"),
+          meta: {
+            title: "Manage Department",
+          },
+          beforeEnter: (to, from, next) => {
+            checkPermission(to, from, next, "department.read");
+          },
+        },
+        {
           path: "/manage-role",
           name: "manage.role",
           component: () => import("../views/ManageRole.vue"),

@@ -21,6 +21,7 @@ class RolePermissionSeeder extends Seeder
         $roleAdmin->givePermissionTo(['role.create', 'role.read', 'role.update', 'role.delete']);
         $roleAdmin->givePermissionTo(['permission.create', 'permission.read', 'permission.update', 'permission.delete']);
         $roleAdmin->givePermissionTo(['company.create', 'company.read', 'company.update', 'company.delete']);
+        $roleAdmin->givePermissionTo(['department.create', 'department.read', 'department.update', 'department.delete']);
 
         $roleManager = Role::where('name', 'manager')->first();
         $roleManager->givePermissionTo(['company.create','company.read', 'company.update', 'company.delete']);

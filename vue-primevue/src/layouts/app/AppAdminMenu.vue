@@ -15,6 +15,11 @@ const model = ref([
         to: "/manage-company",
       },
       {
+        label: "Manage Department",
+        icon: "pi pi-fw pi-table",
+        to: "/manage-department",
+      },
+      {
         label: "Manage Role",
         icon: "pi pi-fw pi-home",
         to: "/manage-role",

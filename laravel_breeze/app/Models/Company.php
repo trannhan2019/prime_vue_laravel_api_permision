@@ -14,4 +14,9 @@ class Company extends Model
         'alias',
         'is_active',
     ];
+
+    public function departments()
+    {
+        return $this->hasMany(Department::class);
+    }
 }

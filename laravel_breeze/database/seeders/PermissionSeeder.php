@@ -26,7 +26,8 @@ class PermissionSeeder extends Seeder
             'user',
             'role',
             'permission',
-            'company'
+            'company',
+            'department',
         ];
 
         foreach ($resources as $resource) {
